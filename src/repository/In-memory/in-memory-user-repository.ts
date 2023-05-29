@@ -11,7 +11,7 @@ export class InMemoryUserRepository implements UserRepository {
   private items: User[] = [];
 
   async create(data: Prisma.UserUncheckedCreateInput): Promise<User> {
-    let id = data.id || this.items[this.items.length - 1].id + 1;
+    let id = data.id || this.items[this.items.length - 1]?.id + 1 || 1;
 
     const user: User = {
       ...data,
@@ -34,15 +34,17 @@ export class InMemoryUserRepository implements UserRepository {
   async delete(id: number): Promise<void> {
     const userIndex = this.items.findIndex((user) => user.id === id);
 
-    if (!userIndex) throw new UserNotFound();
+    if (userIndex === -1) throw new UserNotFound();
 
     this.items.splice(userIndex, 1);
+
+    console.log(this.items);
   }
 
   async update(data: UserUpdate): Promise<void> {
     const userIndex = this.items.findIndex((user) => user.id === data.id);
 
-    if (!userIndex) throw new UserNotFound();
+    if (userIndex === -1) throw new UserNotFound();
 
     this.items[userIndex] = { ...this.items[userIndex], ...data };
   }

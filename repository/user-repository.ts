@@ -5,7 +5,7 @@ interface UserUpdate {
 }
 
 export interface UserRepository {
-  create(data: Prisma.UserCreateInput): Promise<User>;
+  create(data: Prisma.UserUncheckedCreateInput): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
   findById(id: number): Promise<User | null>;
   delete(id: number): Promise<void>;

@@ -2,6 +2,11 @@ import { Prisma, User } from "@prisma/client";
 import { UserRepository } from "../user-repository";
 import { prisma } from "../../lib/prisma";
 
+interface UserUpdate {
+  id: number;
+  name: string;
+}
+
 export class PrismaUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findUnique({ where: { email } });
@@ -17,7 +22,7 @@ export class PrismaUserRepository implements UserRepository {
     await prisma.user.delete({ where: { id } });
   }
 
-  async update(data: User): Promise<void> {
+  async update(data: UserUpdate): Promise<void> {
     await prisma.user.update({ where: { id: data.id }, data });
   }
 

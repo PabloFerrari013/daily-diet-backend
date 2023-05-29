@@ -1,4 +1,4 @@
-import { UserRepository } from "./../../repository/user-repository";
+import { UserRepository } from "../../repository/user-repository";
 import { UserNotFound } from "./errors/user-not-found";
 
 interface UserUpdate {

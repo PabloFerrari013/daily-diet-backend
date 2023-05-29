@@ -1,11 +1,11 @@
-import { UserRepository } from "./../../repository/user-repository";
-import { User } from "@prisma/client";
+import { UserRepository } from "../../repository/user-repository";
+import { Prisma, User } from "@prisma/client";
 import { UserAlreadyExists } from "./errors/user-already-exists";
 
 export class CreateUserUseCase {
   constructor(private userRepository: UserRepository) {}
 
-  async execute(data: User) {
+  async execute(data: Prisma.UserUncheckedCreateInput) {
     const userAlreadyExists = await this.userRepository.findByEmail(data.email);
 
     if (userAlreadyExists) throw new UserAlreadyExists();

@@ -1,6 +1,6 @@
-import { UserRepository } from "./../../repository/user-repository";
+import { UserRepository } from "../../repository/user-repository";
 import { UserNotFound } from "./errors/user-not-found";
-export class DeleteUserUseCase {
+export class FindByIdUseCase {
   constructor(private userRepository: UserRepository) {}
 
   async execute(id: number) {
@@ -8,6 +8,6 @@ export class DeleteUserUseCase {
 
     if (!user) throw new UserNotFound();
 
-    await this.userRepository.delete(id);
+    return user;
   }
 }

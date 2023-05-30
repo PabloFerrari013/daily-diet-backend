@@ -22,6 +22,7 @@ describe("Find User", () => {
       created_at: new Date(),
       email: "pablo@test.com",
       name: "Pablo",
+      password: "root",
     });
 
     const getUser = await findByIdUserUseCase.execute(user.id);

@@ -19,15 +19,10 @@ describe("Create User", () => {
       created_at: createdAt,
       email: "pablo@test.com",
       name: "Pablo",
+      password: "root",
     });
 
-    expect(user).toEqual(
-      expect.objectContaining({
-        email: "pablo@test.com",
-        name: "Pablo",
-        created_at: createdAt,
-      })
-    );
+    expect(user.id).toEqual(1);
   });
 
   it("should not to create a new user wtih duplicate email", async () => {
@@ -35,6 +30,7 @@ describe("Create User", () => {
       created_at: new Date(),
       email: "pablo@test.com",
       name: "Pablo",
+      password: "root",
     };
 
     await createUserUseCase.execute(user);

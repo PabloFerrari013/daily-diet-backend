@@ -24,6 +24,7 @@ describe("Delete User", () => {
       created_at: new Date(),
       email: "pablo@test.com",
       name: "Pablo",
+      password: "root",
     });
 
     await deleteUserUseCase.execute(user.id);

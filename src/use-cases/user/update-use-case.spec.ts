@@ -24,6 +24,7 @@ describe("Update User", () => {
       created_at: new Date(),
       email: "pablo@test.com",
       name: "Pablo",
+      password: "root",
     });
 
     await updateUseCase.execute({ name: "New name", id: user.id });

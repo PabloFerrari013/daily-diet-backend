@@ -24,13 +24,15 @@ export class UserController {
       }
 
       const useCase = makeCreateUserUseCase();
-      useCase.execute(bodySchemaResponse.data);
+      const user = await useCase.execute(bodySchemaResponse.data);
 
-      return res.status(201);
+      return res.status(201).send();
     } catch (error) {
       if (error instanceof UserAlreadyExists) {
         return res.status(406).send("User already exists!");
       }
+
+      console.log(error);
 
       return res
         .status(500)
@@ -40,12 +42,18 @@ export class UserController {
 
   async find(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-
       const useCase = makeFindUserUseCase();
-      const user = useCase.execute(Number(id));
 
-      return res.json(user);
+      let { created_at, email, id, name } = await useCase.execute(
+        Number(req.params.id)
+      );
+
+      return res.json({
+        id,
+        name,
+        email,
+        created_at,
+      });
     } catch (error) {
       if (error instanceof UserNotFound) {
         return res.status(404).send("User not found!");
@@ -74,7 +82,7 @@ export class UserController {
 
       const useCase = makeUpdateUserUseCase();
 
-      const user = useCase.execute({
+      const user = await useCase.execute({
         id: Number(id),
         name: bodySchemaResponse.data.name,
       });
@@ -97,7 +105,7 @@ export class UserController {
 
       const useCase = makeDeleteUserUseCase();
 
-      const user = useCase.execute(Number(id));
+      const user = await useCase.execute(Number(id));
 
       return res.json(user);
     } catch (error) {

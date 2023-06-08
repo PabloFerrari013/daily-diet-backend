@@ -15,6 +15,7 @@ model User{
   name String
   email String @unique
   password String 
+  department String @default("user")
   created_at DateTime @default(now())
 
 @@map("users")

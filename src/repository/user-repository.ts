@@ -1,7 +1,7 @@
 import { Prisma, User } from "@prisma/client";
-interface UserUpdate {
+export interface UserUpdate {
   id: number;
-  name?: string;
+  name: string;
 }
 
 export interface UserRepository {

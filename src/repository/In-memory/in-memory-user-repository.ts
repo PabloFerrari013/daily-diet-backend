@@ -1,6 +1,5 @@
 import { Prisma, User } from "@prisma/client";
 import { UserRepository } from "../user-repository";
-import { UserNotFound } from "../../use-cases/user/errors/user-not-found";
 
 interface UserUpdate {
   id: number;
@@ -16,6 +15,7 @@ export class InMemoryUserRepository implements UserRepository {
     const user: User = {
       ...data,
       id,
+      department: data.department || "user",
       created_at: new Date(),
     };
 
@@ -34,8 +34,6 @@ export class InMemoryUserRepository implements UserRepository {
   async delete(id: number): Promise<void> {
     const userIndex = this.items.findIndex((user) => user.id === id);
 
-    if (userIndex === -1) throw new UserNotFound();
-
     this.items.splice(userIndex, 1);
 
     console.log(this.items);
@@ -43,8 +41,6 @@ export class InMemoryUserRepository implements UserRepository {
 
   async update(data: UserUpdate): Promise<void> {
     const userIndex = this.items.findIndex((user) => user.id === data.id);
-
-    if (userIndex === -1) throw new UserNotFound();
 
     this.items[userIndex] = { ...this.items[userIndex], ...data };
   }

@@ -2,9 +2,8 @@ import { Prisma, User } from "@prisma/client";
 import { UserRepository } from "../user-repository";
 import { prisma } from "../../lib/prisma";
 
-interface UserUpdate {
+interface UserUpdate extends Prisma.UserUpdateInput {
   id: number;
-  name: string;
 }
 
 export class PrismaUserRepository implements UserRepository {
@@ -22,8 +21,8 @@ export class PrismaUserRepository implements UserRepository {
     await prisma.user.delete({ where: { id } });
   }
 
-  async update(data: UserUpdate): Promise<void> {
-    await prisma.user.update({ where: { id: data.id }, data });
+  async update({ id, ...data }: UserUpdate): Promise<void> {
+    await prisma.user.update({ where: { id: id }, data: { ...data } });
   }
 
   async create(data: Prisma.UserCreateInput): Promise<User> {

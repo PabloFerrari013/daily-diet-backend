@@ -4,6 +4,7 @@ import { UserNotFound } from "src/use-cases/user/errors/user-not-found";
 import { makeCreateUserUseCase } from "src/use-cases/user/factory/make-create-use-case";
 import { makeDeleteUserUseCase } from "src/use-cases/user/factory/make-delete-use-case";
 import { makeFindUserUseCase } from "src/use-cases/user/factory/make-find-use-case";
+import { makeMetricsUseCase } from "src/use-cases/user/factory/make-metrics-use-case";
 import { makeUpdateUserUseCase } from "src/use-cases/user/factory/make-update-use-case";
 import { z } from "zod";
 
@@ -26,7 +27,7 @@ export class UserController {
       const useCase = makeCreateUserUseCase();
       const user = await useCase.execute(bodySchemaResponse.data);
 
-      return res.status(201).send();
+      return res.status(201).json(user);
     } catch (error) {
       if (error instanceof UserAlreadyExists) {
         return res.status(406).send("User already exists!");
@@ -44,16 +45,11 @@ export class UserController {
     try {
       const useCase = makeFindUserUseCase();
 
-      let { created_at, email, id, name } = await useCase.execute(
-        Number(req.params.id)
-      );
+      let user: any = await useCase.execute(Number(req.params.id));
 
-      return res.json({
-        id,
-        name,
-        email,
-        created_at,
-      });
+      if (user) user.password = undefined;
+
+      return res.json({ user });
     } catch (error) {
       if (error instanceof UserNotFound) {
         return res.status(404).send("User not found!");
@@ -113,6 +109,22 @@ export class UserController {
         return res.status(404).send("User not found!");
       }
 
+      return res
+        .status(500)
+        .send("There was an internal conflict, please try again later!");
+    }
+  }
+
+  async metrics(req: Request, res: Response) {
+    try {
+      const userId = Number(req.user?.id);
+
+      const useCase = makeMetricsUseCase();
+
+      let data = await useCase.execute(userId);
+
+      return res.json(data);
+    } catch (error) {
       return res
         .status(500)
         .send("There was an internal conflict, please try again later!");

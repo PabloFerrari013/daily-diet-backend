@@ -5,9 +5,6 @@ export class FindByIdUseCase {
 
   async execute(id: number) {
     const user = await this.userRepository.findById(id);
-
-    if (!user) throw new UserNotFound();
-
     return user;
   }
 }

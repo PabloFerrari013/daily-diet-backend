@@ -27,12 +27,11 @@ describe("Find User", () => {
 
     const getUser = await findByIdUserUseCase.execute(user.id);
 
-    expect(getUser.id).toEqual(1);
+    expect(getUser?.id).toEqual(1);
   });
 
-  it("should not to find a user unexpected", async () => {
-    await expect(async () => {
-      await findByIdUserUseCase.execute(1);
-    }).rejects.toBeInstanceOf(UserNotFound);
+  it("should not to find a user non-existent", async () => {
+    let user = await findByIdUserUseCase.execute(1);
+    expect(user).toEqual(null);
   });
 });

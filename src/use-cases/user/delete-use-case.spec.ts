@@ -20,18 +20,18 @@ beforeEach(() => {
 
 describe("Delete User", () => {
   it("should to delete a user", async () => {
-    const user = await createUserUseCase.execute({
-      created_at: new Date(),
+    await createUserUseCase.execute({
+      id: 1,
       email: "pablo@test.com",
       name: "Pablo",
       password: "root",
     });
 
-    await deleteUserUseCase.execute(user.id);
+    await deleteUserUseCase.execute(1);
 
-    await expect(async () => {
-      await findByIdUseCase.execute(1);
-    }).rejects.toBeInstanceOf(UserNotFound);
+    let user = await findByIdUseCase.execute(1);
+
+    expect(user).toEqual(null);
   });
 
   it("should not to delete a user unexpected", async () => {
